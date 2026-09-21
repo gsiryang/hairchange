@@ -1,0 +1,55 @@
+// Run with: node tests/publishing.test.cjs
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const path=require('path'),root=path.join(__dirname,'..','web');
+const memory=new Map();let failWrite=false;
+function boot(){
+  const elements=new Map(),listeners={};
+  const element=s=>{if(!elements.has(s))elements.set(s,{innerHTML:'',textContent:'',style:{},value:''});return elements.get(s)};
+  const context={document:{querySelector:element,addEventListener(name,fn){(listeners[name]??=[]).push(fn)}},location:{hash:'#home'},window:{addEventListener(){},scrollTo(){},confirm(){return true}},localStorage:{getItem:k=>memory.get(k)||null,setItem(k,v){if(failWrite)throw new Error('quota');memory.set(k,v)}},setTimeout(){return 1},clearTimeout(){},navigator:{}};
+  // Browsers reserve window.top; a header helper named top used to blank the home page.
+  Object.defineProperty(context,'top',{value:context.window,configurable:false,writable:false});
+  vm.createContext(context);
+  for(const name of ['publishing.js','mobile.js'])vm.runInContext(fs.readFileSync(path.join(root,name),'utf8'),context);
+  return {context,element,listeners,run:code=>vm.runInContext(code,context),route(route){context.location.hash='#'+route;vm.runInContext('render()',context);return element('#screen').innerHTML}};
+}
+let app=boot();
+assert(app.route('').includes('下一种风格'),'root URL renders the homepage with browser globals');
+const input={title:'<img src=x onerror=alert(1)>',body:'正文第一行\n第二行<script>alert(1)</script>',cat:'发型',images:['data:image/jpeg;base64,YQ==']};
+app.context.input=input;
+app.run("storePost(input,'published')");
+const id=app.run('ownPosts[0].id');
+assert(app.route('home').includes('&lt;img src=x'));
+assert(!app.element('#screen').innerHTML.includes('<img src=x'));
+assert(app.element('#nav').innerHTML.indexOf('data-go="model"')<app.element('#nav').innerHTML.indexOf('data-go="publish"'));
+assert(app.element('#nav').innerHTML.indexOf('data-go="publish"')<app.element('#nav').innerHTML.indexOf('data-go="shops"'));
+assert(app.route('post/'+id).includes('&lt;script&gt;'));
+assert(app.route('me').includes('<b>1</b><span>我的分享'));
+app=boot();assert.equal(app.run('ownPosts.length'),1,'refresh preserves post');
+app.context.edit={...input,title:'更新后的标题'};app.run(`storePost(edit,'published',${id})`);
+assert.equal(app.run('ownPosts.length'),1,'edit does not duplicate');
+assert(app.route('home').includes('更新后的标题'));
+app.context.draft={title:'私密草稿',body:'',cat:'cosplay',images:[]};app.run("storePost(draft,'draft')");
+assert(!app.route('home').includes('私密草稿'));
+app.run("manageFilter='draft'");assert(app.route('manage').includes('私密草稿'));
+const draftId=app.run("ownPosts.find(p=>p.status==='draft').id");
+assert(app.route('publish/'+draftId).includes('私密草稿'));
+app.context.input=input;
+assert.throws(()=>app.run("storePost({...input,title:' '},'published')"));
+assert.throws(()=>app.run("storePost({...input,body:''},'published')"));
+assert.throws(()=>app.run("storePost({...input,images:[]},'published')"));
+assert.throws(()=>app.run("storePost({...input,images:['javascript:alert(1)']},'published')"));
+assert.throws(()=>app.run("storePost({...input,cat:'invalid'},'published')"));
+const before=app.run('JSON.stringify(ownPosts)');failWrite=true;
+assert.throws(()=>app.run("storePost({...input,title:'保存失败'},'published')"));
+assert.equal(app.run('JSON.stringify(ownPosts)'),before,'quota failure is atomic');failWrite=false;
+app.run(`liked.add(${id});saved.add(${id});manageFilter='published'`);app.route('manage');
+for(const listener of app.listeners.click) listener({target:{closest(){return {dataset:{deletePost:String(id)}}}}});
+assert(!app.route('home').includes('更新后的标题'));
+assert.equal(app.run(`liked.has(${id}) || saved.has(${id})`),false);
+assert(app.route('post/'+id).includes('不存在或已删除'));
+app=boot();assert.equal(app.run(`ownPosts.some(p=>p.id===${id})`),false,'delete persists');
+assert(app.route('publish').includes('发布分享'));
+for(const route of ['shops','shop/1','stylist/1/2','model','me','privacy'])assert(app.route(route).length>100);
+memory.set('fajian.posts.v1','broken json');app=boot();assert(app.run('postLoadError'));
+app.context.input=input;assert.throws(()=>app.run("storePost(input,'published')"));assert.equal(memory.get('fajian.posts.v1'),'broken json');
+console.log('PASS: publish, refresh, edit, drafts, navigation, escaping, validation, quota failure, delete, existing routes and corrupt-storage protection');

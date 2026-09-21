@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>发型实验室 · Hair Studio</title><link rel="stylesheet" href="studio.css"></head>
+<body class="embedded">
+<header><a class="brand" href="/">◒ <span>发型实验室<small>HAIR STUDIO</small></span></a><span class="pill">早期体验 · 01</span></header>
+<main>
+<div class="intro"><span class="eyebrow">A LITTLE CHANGE, A NEW YOU</span><h1>换个发型，<em>看看新的自己。</em></h1><p>转一转，看清每个角度。把喜欢的造型放在一起比较。</p></div>
+<div class="workspace">
+<section class="viewer-panel"><div class="viewer-top"><span class="pill">● 3D 试戴</span><button id="open-photos" class="generate-button" aria-haspopup="dialog">＋ 生成本人建模</button></div><div id="viewport" aria-label="三维示例头模，拖动可旋转"><p id="loading">正在准备三维试戴…</p></div><div class="viewer-bottom"><span>拖动旋转 · 滚轮缩放</span><div><button id="front">正面</button><button id="side">侧面</button><button id="back">背面</button></div></div><div class="notice">通用示例头模 · 可调整长度与蓬松度</div></section>
+<aside>
+
+<section class="card"><h2>选择发型</h2><div class="styles"><button data-style="crop" class="style active" aria-pressed="true"><b>01</b><span>利落短发<small>清爽 · 短发轮廓</small></span><i>↗</i></button><button data-style="part" class="style" aria-pressed="false"><b>02</b><span>自然侧分<small>层次 · 蓬松轮廓</small></span><i>↗</i></button><button data-style="bob" class="style" aria-pressed="false"><b>03</b><span>经典波波<small>柔和 · 齐颈轮廓</small></span><i>↗</i></button></div><div class="control"><label for="color">发色</label><input id="color" type="color" value="#29211e"><span id="color-name">自选颜色</span></div><div class="control"><label for="length">头发长度</label><input id="length" type="range" min="60" max="150" value="100" aria-describedby="length-help"><output id="length-value" for="length">100%</output></div><p class="slider-help" id="length-help">短 ← 默认长度的比例 → 长</p><div class="control"><label for="volume">头发蓬松度</label><input id="volume" type="range" min="0" max="100" value="30"><output id="volume-value" for="volume">30%</output></div><p class="slider-help">贴服 ← → 蓬松</p><button id="save" class="primary">＋ 保存当前角度到对比</button><p class="hint">发型为原创简化轮廓，用于验证交互，不代表真实剪发效果。</p></section>
+</aside></div>
+<section class="comparison"><div class="section-title"><div><span class="eyebrow">YOUR SHORTLIST</span><h2>喜欢的，放一起看看。</h2></div><button id="clear-saved" class="text-button">清空对比</button></div><div id="saved" class="saved"><p class="empty">还没有保存的造型。试试从一个正面角度开始。</p></div></section>
+<footer>发型实验室 / 本地技术原型 <span>照片不会上传 · 无付费服务</span></footer>
+</main><dialog id="photo-dialog" aria-labelledby="photo-dialog-title"><div class="dialog-heading"><h2 id="photo-dialog-title">生成本人建模</h2><button id="close-photos" aria-label="关闭照片准备窗口">×</button></div><section class="card"><div class="section-title"><h2><span>01</span> 准备你的照片</h2><button id="clear" class="text-button">清除</button></div><p class="hint">自然光、露出额头、保持平视，每张不超过 10 MB。</p><div class="photos" id="photos"></div><p id="photo-status" class="hint" aria-live="polite">照片仅保留在当前页面，刷新后清除。</p></section><p class="dialog-note">个人头模生成功能尚未接入，目前可准备和预览照片，不会上传。</p><button id="done-photos" class="primary">完成照片准备</button></dialog><div id="toast" role="status"></div><script type="module" src="app.js"></script>
+</body></html>
+
