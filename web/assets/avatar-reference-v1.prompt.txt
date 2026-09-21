@@ -1,5 +1,0 @@
-Tool: built-in image_gen. Mode: reference-guided image generation (identity-preserve).
-Reference: user-provided codex-clipboard-6f4df086-2d63-4132-82a1-14cc6de2ff56.jpg.
-Output: avatar-reference-v1.png. This is a 2D visual prototype render, not reconstructed 3D geometry.
-
-Use case: identity-preserve. Asset type: realistic digital human bust preview for a mobile hairstyle try-on app. Reference image: preserve this man's recognizable face shape, brows, eyes, nose, lips and natural skin tone. Create a single premium photorealistic 3D-render-style head-and-shoulders portrait facing straight forward, neutral expression, detailed natural skin, lifelike eyes, individual black hair strands and the same textured short black hairstyle. Plain dark charcoal crewneck instead of jacket, warm ivory seamless studio background, soft studio lighting, centered symmetrical composition, entire hairstyle fully visible with generous margin above and around hair, crop below shoulders. Professional digital double presentation, not a clay mannequin, not cartoon, not plastic, no pedestal. No text, no watermarks, no UI, no collage. This is a 2D visual prototype render.
