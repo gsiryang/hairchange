@@ -17,4 +17,4 @@
 .ai-tryon-frame{display:block;width:100%;height:1650px;border:0;background:#fcfaf6}
 .salon3d-frame{display:block;width:100%;height:1080px;border:0;background:#f7f4ef}
 .shop-address{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.55!important;color:#76695c!important}
-.address>span:not(.address-pin){flex:1}.address-pin{flex:0 0 auto!important;color:#ad7d54;font-size:18px}.address .amap-link{flex:0 0 auto;text-decoration:none;font-size:10px;font-weight:700;color:#fff;background:#4f8d43;padding:9px 10px;border-radius:9px;white-space:nowrap}
+.address>span:not(.address-pin){flex:1}.address-pin{flex:0 0 auto!important;color:#ad7d54;font-size:18px}.address .amap-link{flex:0 0 auto;border:0;text-decoration:none;font-size:10px;font-weight:700;color:#fff;background:#4f8d43;padding:9px 10px;border-radius:9px;white-space:nowrap;cursor:pointer}
