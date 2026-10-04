@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>发间 · 3D 发型试戴</title>
+  <link rel="stylesheet" href="salon3d.css">
+</head>
+<body>
+  <main>
+    <header class="page-head">
+      <div>
+        <span class="kicker">3D HAIR STUDIO</span>
+        <h1>转一转，再决定。</h1>
+        <p>拖动查看正面与侧面，选择发型后即时切换。</p>
+      </div>
+      <span class="demo-badge">公开授权示例头模</span>
+    </header>
+
+    <section class="viewer-card" aria-label="可旋转三维头模">
+      <div id="viewport"></div>
+      <div id="loading" role="status"><span></span><b>正在准备 3D 头模</b><small>首次打开需要加载模型与纹理</small></div>
+      <div class="viewer-top">
+        <span id="view-label">正面</span>
+        <button id="reset" type="button">↻ 回到正面</button>
+      </div>
+      <div class="drag-hint">↔ 拖动旋转 · 双指或滚轮缩放</div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title"><div><small>01</small><h2>选择发型</h2></div><span id="style-count">1 / 3</span></div>
+      <div class="styles" role="radiogroup" aria-label="发型选择">
+        <button class="style active" type="button" data-style="short" role="radio" aria-checked="true">
+          <img src="assets/salon3d/thumb-short01.png" alt="清爽短发预览"><b>清爽短发</b><small>利落 · 日常</small>
+        </button>
+        <button class="style" type="button" data-style="bob" role="radio" aria-checked="false">
+          <img src="assets/salon3d/thumb-bob01.png" alt="层次中发预览"><b>层次中发</b><small>柔和 · 修饰</small>
+        </button>
+        <button class="style" type="button" data-style="long" role="radio" aria-checked="false">
+          <img src="assets/salon3d/thumb-long01.png" alt="自然长发预览"><b>自然长发</b><small>垂顺 · 轮廓</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="panel adjustments">
+      <div class="section-title"><div><small>02</small><h2>微调轮廓</h2></div><button id="restore" type="button">恢复默认</button></div>
+      <label><span>头发长度 <output id="length-value">50</output></span><input id="length" type="range" min="0" max="100" value="50"></label>
+      <label><span>头发蓬松度 <output id="volume-value">50</output></span><input id="volume" type="range" min="0" max="100" value="50"></label>
+      <div class="color-row"><span>发色</span><div role="radiogroup" aria-label="发色选择">
+        <button class="color active" type="button" data-color="#171412" style="--swatch:#171412" aria-label="自然黑" aria-checked="true"></button>
+        <button class="color" type="button" data-color="#3a2117" style="--swatch:#3a2117" aria-label="深棕" aria-checked="false"></button>
+        <button class="color" type="button" data-color="#6a3925" style="--swatch:#6a3925" aria-label="暖棕" aria-checked="false"></button>
+        <button class="color" type="button" data-color="#786b5c" style="--swatch:#786b5c" aria-label="雾灰棕" aria-checked="false"></button>
+      </div></div>
+    </section>
+
+    <p class="boundary">当前为公开授权的标准人物与发型网格，用于验证旋转、侧脸观察和换发型体验；还没有根据用户照片还原本人。</p>
+    <p id="error" role="alert"></p>
+  </main>
+  <script type="module" src="salon3d.js"></script>
+</body>
+</html>

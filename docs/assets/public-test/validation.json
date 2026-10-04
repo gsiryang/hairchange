@@ -1,0 +1,8 @@
+{
+  "vertices": 471,
+  "triangles": 934,
+  "source_sha256": "744dd848fbb0584229169e01c4944664957c62495fb9e8af514a088ebca43e19",
+  "geometry_checks": "passed",
+  "visual_review": "pending",
+  "side_view_ground_truth": "unavailable"
+}

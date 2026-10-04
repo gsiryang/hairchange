@@ -3,8 +3,10 @@ const $=s=>document.querySelector(s);
 const host=$('#stage');
 try {await start();}catch(error){$('#status').textContent='三维加载失败：'+error.message;console.error(error);}
 async function start(){
- const response=await fetch('assets/reference-face.json');if(!response.ok)throw new Error('头模文件不可用');const data=await response.json();
- const texture=await new THREE.TextureLoader().loadAsync('assets/avatar-reference-v1.png');texture.colorSpace=THREE.SRGBColorSpace;
+ const publicTest=new URLSearchParams(location.search).get('sample')==='public-test';
+ const response=await fetch(publicTest?'assets/public-test/face.json':'assets/reference-face.json');if(!response.ok)throw new Error('头模文件不可用');const data=await response.json();
+ const texture=await new THREE.TextureLoader().loadAsync(publicTest?'assets/public-test/portrait.jpg':'assets/avatar-reference-v1.png');texture.colorSpace=THREE.SRGBColorSpace;
+ if(publicTest)document.querySelector('.badge').textContent='公有领域素材 · 基线测试';
  const scene=new THREE.Scene();scene.background=new THREE.Color('#eee5d8');
  const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;
  host.append(renderer.domElement);$('#status').hidden=true;
@@ -13,7 +15,7 @@ async function start(){
  const head=new THREE.Group();scene.add(head);
  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(data.positions.flat(),3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(data.uv.flat(),2));geo.setIndex(data.indices);geo.computeVertexNormals();
  const faceMat=new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide});const face=new THREE.Mesh(geo,faceMat);head.add(face);
- const skin=new THREE.MeshStandardMaterial({color:0xc79880,roughness:.92,side:THREE.DoubleSide});
+ const skin=new THREE.MeshStandardMaterial({color:data.skinColor||0xc79880,roughness:.92,side:THREE.DoubleSide});
  // Complete the unseen head behind the detected facial contour, rather than a flat image plane.
  const outline=data.oval.map(i=>new THREE.Vector3(...data.positions[i]));const pos=[],indices=[];const n=outline.length;
  for(let ring=0;ring<=10;ring++)for(let i=0;i<n;i++){

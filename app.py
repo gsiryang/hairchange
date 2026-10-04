@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--port', type=int, default=8765)
     args = parser.parse_args()
-    root = Path(__file__).resolve().parent / 'web'
+    root = Path(__file__).resolve().parent / 'docs'
     server = ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
     print('Open http://{}:{}'.format(args.host, args.port), flush=True)
     try:
